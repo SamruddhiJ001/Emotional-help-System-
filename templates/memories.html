@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f3eb">
+  <title>My Memories - SAATHI</title>
+  <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="page-shell">
+  <header class="site-header dashboard-header">
+    <a class="brand" href="{{ url_for('home') }}" aria-label="SAATHI home">
+      <span class="brand-mark" aria-hidden="true"><i></i><b></b></span>
+      <span>saathi<span class="brand-period">.</span></span>
+    </a>
+    <nav class="top-nav dashboard-nav" aria-label="Main navigation">
+      <a href="{{ url_for('home') }}">Home</a>
+      <a href="{{ url_for('chat') }}">Chat</a>
+      <a href="{{ url_for('check_in_page') }}">Check-in</a>
+      <a href="{{ url_for('profile_view') }}">Profile</a>
+    </nav>
+  </header>
+
+  <main class="page-main compact-main">
+    <section class="simple-panel">
+      <p class="eyebrow">My Memories</p>
+      <h1>Saved memories</h1>
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="flash-stack">
+            {% for category, message in messages %}
+              <p class="flash-item {{ category }}">{{ message }}</p>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      {% if memories %}
+      <div class="memory-list">
+        {% for memory in memories %}
+        <article class="memory-item">
+          <div>
+            <p class="memory-tag">{{ memory.category }}</p>
+            <p>{{ memory.content }}</p>
+          </div>
+          <div class="memory-meta">
+            <small>{{ memory.created_at.strftime('%d %b %Y') }}</small>
+            <form method="post" action="{{ url_for('delete_memory', memory_id=memory.id) }}" onsubmit="return confirm('Delete this memory?');">
+              <button type="submit" class="button button-quiet small-button">Delete</button>
+            </form>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="empty-state">No memories saved yet.</div>
+      {% endif %}
+
+      <form method="post" action="{{ url_for('forget_all_memories') }}" onsubmit="return confirm('Forget everything?');" class="stacked-form spaced-form">
+        <button type="submit" class="button button-quiet danger-button">Forget everything</button>
+      </form>
+    </section>
+  </main>
+</body>
+</html>

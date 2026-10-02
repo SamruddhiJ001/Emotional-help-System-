@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f3eb">
+  <title>Daily Check-in - SAATHI</title>
+  <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="page-shell">
+  <header class="site-header dashboard-header">
+    <a class="brand" href="{{ url_for('home') }}" aria-label="SAATHI home">
+      <span class="brand-mark" aria-hidden="true"><i></i><b></b></span>
+      <span>saathi<span class="brand-period">.</span></span>
+    </a>
+    <nav class="top-nav dashboard-nav" aria-label="Main navigation">
+      <a href="{{ url_for('home') }}">Home</a>
+      <a href="{{ url_for('chat') }}">Chat</a>
+      <a href="{{ url_for('check_in_page') }}">Check-in</a>
+      <a href="{{ url_for('profile_view') }}">Profile</a>
+    </nav>
+  </header>
+
+  <main class="page-main compact-main">
+    <section class="simple-panel">
+      <p class="eyebrow">Check-in</p>
+      <h1>How are you doing today?</h1>
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="flash-stack">
+            {% for category, message in messages %}
+              <p class="flash-item {{ category }}">{{ message }}</p>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      {% if today_check_in %}
+      <div class="info-banner">You already checked in today. Thanks for taking a moment.</div>
+      {% endif %}
+
+      <form method="post" action="{{ url_for('submit_check_in') }}" class="stacked-form checkin-form">
+        <div class="mood-grid">
+          <label><input type="radio" name="mood" value="good"> 😊 Good</label>
+          <label><input type="radio" name="mood" value="okay"> 🙂 Okay</label>
+          <label><input type="radio" name="mood" value="not-great"> 😐 Not great</label>
+          <label><input type="radio" name="mood" value="difficult"> 😟 Difficult</label>
+          <label><input type="radio" name="mood" value="very-difficult"> 😞 Very difficult</label>
+        </div>
+
+        <label for="checkin-note">What’s on your mind?</label>
+        <textarea id="checkin-note" name="note" rows="4" placeholder="Optional note..."></textarea>
+
+        <button type="submit" class="button button-primary">Submit check-in</button>
+      </form>
+    </section>
+  </main>
+</body>
+</html>

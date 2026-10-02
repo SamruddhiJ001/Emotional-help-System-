@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f4f4ed">
+  <meta name="description" content="A friendly space for an everyday conversation with SAATHI.">
+  <title>Talk with SAATHI</title>
+  <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght,SOFT,WONK@9..144,40,1,1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
+  <script src="{{ url_for('static', filename='js/chat.js') }}" defer></script>
+</head>
+<body class="chat-page">
+  <div class="chat-shell">
+    <header class="chat-header">
+      <a class="home-link" href="{{ url_for('home') }}" aria-label="Back to SAATHI home">
+        <span aria-hidden="true">&#8592;</span><span class="home-link-label">Home</span>
+      </a>
+      <a class="chat-brand" href="{{ url_for('home') }}" aria-label="SAATHI home">
+        <span class="brand-mark" aria-hidden="true"><i></i><b></b></span>
+        <span class="brand-copy"><strong>SAATHI <span aria-hidden="true">&#128153;</span></strong><small>Your conversation space</small></span>
+      </a>
+      <details class="account-menu">
+        <summary>Hi, {{ current_user.username }} &#128075;</summary>
+        <div class="account-popover">
+          <strong>{{ current_user.username }}</strong>
+          <span>{{ current_user.email }}</span>
+          <form method="post" action="{{ url_for('logout') }}"><button type="submit">Log out</button></form>
+        </div>
+      </details>
+    </header>
+
+    <div class="chat-toolbar">
+      <button class="history-toggle" id="history-toggle" type="button" aria-controls="conversation-history" aria-expanded="false">
+        <span aria-hidden="true">&#9776;</span><span>Conversations</span>
+      </button>
+      <div class="mode-group" role="group" aria-label="Conversation style">
+        <button class="mode-button is-active" type="button" data-mode="talk" aria-pressed="true">Talk</button>
+        <button class="mode-button" type="button" data-mode="light" aria-pressed="false">&#128516; Light</button>
+        <button class="mode-button" type="button" data-mode="focus" aria-pressed="false">Focus</button>
+        <button class="mode-button" type="button" data-mode="calm" aria-pressed="false">&#127807; Calm</button>
+      </div>
+      <button class="story-button" id="story-button" type="button" aria-label="Ask SAATHI to tell an original short story">
+        <span aria-hidden="true">&#10022;</span><span>Tell me a story</span>
+      </button>
+    </div>
+    <nav class="chat-mini-nav" aria-label="Quick navigation">
+      <a href="{{ url_for('home') }}">Home</a>
+      <a href="{{ url_for('chat') }}">Chat</a>
+      <a href="{{ url_for('check_in_page') }}">Check-in</a>
+      <a href="{{ url_for('profile_view') }}">Profile</a>
+    </nav>
+
+    <div class="chat-workspace">
+      <aside class="history-panel" id="conversation-history" aria-label="Your conversations">
+        <div class="history-heading">
+          <h1>Your conversations</h1>
+          <form method="post" action="{{ url_for('new_chat') }}">
+            <button class="new-chat-button" type="submit"><span aria-hidden="true">+</span> New Chat</button>
+          </form>
+        </div>
+        <nav class="history-list" aria-label="Conversation history">
+          {% for section, items in conversation_sections.items() %}
+            {% if items %}
+              <section class="history-section">
+                <h2>{{ section }}</h2>
+                {% for item in items %}
+                  <a class="history-item{% if item.id == conversation.id %} is-current{% endif %}" href="{{ url_for('chat_conversation', conversation_id=item.id) }}"{% if item.id == conversation.id %} aria-current="page"{% endif %}>
+                    <span>{{ item.title }}</span>
+                    <time datetime="{{ item.updated_at.isoformat() }}">{{ item.updated_at.strftime('%I:%M %p') }}</time>
+                  </a>
+                {% endfor %}
+              </section>
+            {% endif %}
+          {% endfor %}
+        </nav>
+      </aside>
+
+      <section class="chat-content" data-conversation-id="{{ conversation.id }}" aria-label="Active conversation">
+        <main class="conversation" id="conversation" aria-label="Conversation with SAATHI">
+          <div class="conversation-date"><span>Today</span></div>
+          <div class="message-list" id="message-list" role="log" aria-label="Chat messages" aria-live="polite" aria-relevant="additions" data-has-messages="{{ 'true' if conversation.messages else 'false' }}">
+            {% if conversation.messages %}
+              {% for message in conversation.messages %}
+                <article class="message-row {{ 'assistant-row' if message.sender == 'saathi' else 'user-row' }}">
+                  {% if message.sender == 'saathi' %}<span class="message-avatar" aria-hidden="true">S</span>{% endif %}
+                  <div class="message-content">
+                    {% if message.sender == 'saathi' %}<span class="message-name">SAATHI</span>{% endif %}
+                    <div class="bubble {{ 'assistant-bubble' if message.sender == 'saathi' else 'user-bubble' }}">{{ message.content }}</div>
+                  </div>
+                </article>
+              {% endfor %}
+            {% else %}
+              <article class="message-row assistant-row">
+                <span class="message-avatar" aria-hidden="true">S</span>
+                <div class="message-content">
+                  <span class="message-name">SAATHI</span>
+                  <div class="bubble assistant-bubble welcome-bubble">
+                    <p class="welcome-title">Hey <span aria-hidden="true">&#128075;</span><br>How was your day?</p>
+                    <p class="welcome-copy">I'm here for a conversation. You can talk about your day, something that's bothering you, or absolutely anything else.</p>
+                  </div>
+                </div>
+              </article>
+            {% endif %}
+          </div>
+
+          <section class="quick-start" id="quick-start" aria-labelledby="quick-title"{% if conversation.messages %} hidden{% endif %}>
+            <h2 id="quick-title">A few ways to start</h2>
+            <div class="quick-prompts">
+              <button type="button" class="prompt-chip">How was your day?</button>
+              <button type="button" class="prompt-chip">I feel stressed.</button>
+              <button type="button" class="prompt-chip">I want to talk.</button>
+              <button type="button" class="prompt-chip">Tell me something interesting.</button>
+              <button type="button" class="prompt-chip">Cheer me up.</button>
+              <button type="button" class="prompt-chip">I'm bored.</button>
+            </div>
+          </section>
+          <div class="typing-row" id="typing-indicator" role="status" aria-live="polite" hidden>
+            <span class="typing-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span>SAATHI is typing...</span>
+          </div>
+        </main>
+
+        <footer class="composer-area">
+          <div id="safety-banner" class="safety-banner" hidden>
+            <strong>I'm really glad you told me.</strong>
+            <p>Please consider contacting someone you trust and getting immediate support if you may be in immediate danger.</p>
+            <div class="safety-actions">
+              <a href="{{ url_for('support_page') }}" class="button button-primary small-button">Get Help Now</a>
+              <a href="{{ url_for('profile_view') }}" class="button button-quiet small-button">Talk to someone I trust</a>
+            </div>
+          </div>
+          <div id="memory-status" class="memory-status" aria-live="polite"></div>
+          <form class="composer" id="chat-form">
+            <label class="visually-hidden" for="message-input">Write a message to SAATHI</label>
+            <textarea id="message-input" name="message" rows="1" maxlength="1000" placeholder="Write whatever's on your mind..." autocomplete="off"></textarea>
+            <button class="send-button" type="submit" aria-label="Send message">
+              <span class="send-label">Send</span><span class="send-arrow" aria-hidden="true">&#8593;</span>
+            </button>
+          </form>
+          <p class="composer-note">A demo conversation, not professional care.</p>
+        </footer>
+      </section>
+    </div>
+  </div>
+</body>
+</html>

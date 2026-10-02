@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f3eb">
+  <meta name="description" content="SAATHI is a friendly companion for everyday conversations, reflection and support.">
+  <title>SAATHI - A little space to talk</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght,SOFT,WONK@9..144,40,1,1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="{{ url_for('home') }}" aria-label="SAATHI home">
+      <span class="brand-mark" aria-hidden="true"><i></i><b></b></span>
+      <span>saathi<span class="brand-period">.</span></span>
+    </a>
+    <nav class="top-nav" aria-label="Main navigation">
+      <a href="#how-it-works">How it works</a>
+      {% if current_user %}
+        <a href="{{ url_for('chat') }}">Hi, {{ current_user.username }}</a>
+      {% else %}
+        <a href="{{ url_for('login') }}">Log in</a>
+        <a href="{{ url_for('register') }}">Register</a>
+      {% endif %}
+      <a class="nav-cta" href="{{ url_for('chat') }}">Start talking <span aria-hidden="true">&#8599;</span></a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="status-dot" aria-hidden="true"></span> A little space for whatever's on your mind</p>
+        <h1 id="hero-title">Some days you just need <em>someone to talk to.</em></h1>
+        <p class="hero-description">SAATHI is a friendly AI wellbeing companion for everyday conversations, reflection and support.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="{{ url_for('chat') }}">Start talking <span aria-hidden="true">&#8594;</span></a>
+          <a class="button button-quiet" href="#how-it-works">How it works <span aria-hidden="true">&#8595;</span></a>
+        </div>
+        <p class="small-note">No pressure to have it all figured out.</p>
+      </div>
+
+      <div class="conversation-art" aria-label="A preview of a friendly conversation">
+        <div class="art-topline"><span class="art-avatar" aria-hidden="true">S</span><span><strong>SAATHI</strong><small>Here for a chat</small></span><span class="art-menu" aria-hidden="true">•••</span></div>
+        <div class="chat-preview">
+          <p class="message message-them">Hey, how was your day?</p>
+          <p class="message message-you">A lot, honestly. Still processing it.</p>
+          <p class="message message-them">That's okay. We can take it one bit at a time.</p>
+        </div>
+        <div class="art-compose"><span>Say whatever's on your mind...</span><span class="send-mark" aria-hidden="true">&#8593;</span></div>
+        <span class="art-spark spark-one" aria-hidden="true">✳</span>
+        <span class="art-spark spark-two" aria-hidden="true">✳</span>
+      </div>
+      <div class="hero-caption"><span>01</span> A conversation, at your pace</div>
+    </section>
+
+    <section class="how-section" id="how-it-works" aria-labelledby="how-title">
+      <div class="section-heading">
+        <p class="eyebrow">A good place to begin</p>
+        <h2 id="how-title">A little room to <em>feel like you.</em></h2>
+        <p>Talk about the big things, the small things, or nothing in particular.</p>
+      </div>
+      <div class="feature-grid">
+        <article class="feature feature-talk">
+          <span class="feature-index">01 / TALK</span>
+          <div class="feature-icon icon-talk" aria-hidden="true"><span></span><span></span></div>
+          <h3>Talk naturally</h3>
+          <p>Start wherever you are. No scripts, no pressure to find the perfect words.</p>
+        </article>
+        <article class="feature feature-reflect">
+          <span class="feature-index">02 / REFLECT</span>
+          <div class="feature-icon icon-reflect" aria-hidden="true"><span></span><span></span><span></span></div>
+          <h3>Reflect on your day</h3>
+          <p>Make a little space to notice what went well, what felt hard, or what surprised you.</p>
+        </article>
+        <article class="feature feature-track">
+          <span class="feature-index">03 / NOTICE</span>
+          <div class="feature-icon icon-track" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+          <h3>Track your wellbeing</h3>
+          <p>Check in with yourself over time and see your own patterns take shape.</p>
+        </article>
+        <article class="feature feature-support">
+          <span class="feature-index">04 / CONNECT</span>
+          <div class="feature-icon icon-support" aria-hidden="true"><span></span><span></span></div>
+          <h3>Find support</h3>
+          <p>When things feel like a lot, get a nudge toward reaching out to someone you trust.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="closing-band" aria-label="A note about SAATHI">
+      <span class="closing-mark" aria-hidden="true">“</span>
+      <p>Not every day needs fixing.<br><em>Sometimes it helps to be heard.</em></p>
+      <a href="#hero-title" class="back-top">Back to top <span aria-hidden="true">&#8593;</span></a>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <a class="brand footer-brand" href="{{ url_for('home') }}"><span class="brand-mark" aria-hidden="true"><i></i><b></b></span><span>saathi<span class="brand-period">.</span></span></a>
+    <p>Support for everyday moments. SAATHI is not a substitute for professional care.</p>
+    <span class="footer-tagline">Talk. Feel heard. Take the next step.</span>
+  </footer>
+</body>
+</html>

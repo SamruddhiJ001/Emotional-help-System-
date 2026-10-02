@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f3eb">
+  <title>Create an account - SAATHI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght,SOFT,WONK@9..144,40,1,1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="auth-page">
+  <header class="auth-header">
+    <a class="brand" href="{{ url_for('home') }}" aria-label="SAATHI home">
+      <span class="brand-mark" aria-hidden="true"><i></i><b></b></span>
+      <span>saathi<span class="brand-period">.</span></span>
+    </a>
+    <a class="auth-nav-link" href="{{ url_for('login') }}">Already have an account? <strong>Log in</strong></a>
+  </header>
+  <main class="auth-main">
+    <section class="auth-card" aria-labelledby="register-title">
+      <p class="eyebrow">A space of your own</p>
+      <h1 id="register-title">Let's get you started.</h1>
+      <p class="auth-intro">Create an account to keep your conversations together.</p>
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="auth-notices" role="alert">
+            {% for category, message in messages %}<p class="auth-notice {{ category }}">{{ message }}</p>{% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+      <form class="auth-form" method="post" action="{{ url_for('register_submit') }}">
+        <label for="username">Name or username</label>
+        <input id="username" name="username" type="text" minlength="2" maxlength="40" autocomplete="username" required value="{{ request.form.get('username', '') }}">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" maxlength="254" autocomplete="email" required value="{{ request.form.get('email', '') }}">
+        <label for="password">Password <span>At least 8 characters</span></label>
+        <input id="password" name="password" type="password" minlength="8" autocomplete="new-password" required>
+        <label for="confirm-password">Confirm password</label>
+        <input id="confirm-password" name="confirm_password" type="password" minlength="8" autocomplete="new-password" required>
+        <button class="auth-submit" type="submit">Create account <span aria-hidden="true">&#8594;</span></button>
+      </form>
+      <p class="auth-footnote">Your password is stored securely as a hash, never as plain text.</p>
+    </section>
+  </main>
+</body>
+</html>

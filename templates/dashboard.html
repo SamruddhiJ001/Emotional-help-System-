@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f3eb">
+  <title>SAATHI Home</title>
+  <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => navigator.serviceWorker.register('{{ url_for("static", filename="sw.js") }}'));
+    }
+  </script>
+</head>
+<body class="page-shell">
+  <header class="site-header dashboard-header">
+    <a class="brand" href="{{ url_for('home') }}" aria-label="SAATHI home">
+      <span class="brand-mark" aria-hidden="true"><i></i><b></b></span>
+      <span>saathi<span class="brand-period">.</span></span>
+    </a>
+    <nav class="top-nav dashboard-nav" aria-label="Main navigation">
+      <a href="{{ url_for('home') }}">Home</a>
+      <a href="{{ url_for('chat') }}">Chat</a>
+      <a href="{{ url_for('check_in_page') }}">Check-in</a>
+      <a href="{{ url_for('profile_view') }}">Profile</a>
+    </nav>
+  </header>
+
+  <main class="page-main dashboard-main">
+    <section class="dashboard-panel">
+      <p class="eyebrow">Welcome</p>
+      <h1>Hi, {{ current_user.username }} 👋</h1>
+      <div class="dashboard-grid">
+        <a class="dashboard-card" href="{{ url_for('chat') }}">
+          <span class="card-emoji">💬</span>
+          <span>Talk to SAATHI</span>
+        </a>
+        <a class="dashboard-card" href="{{ url_for('check_in_page') }}">
+          <span class="card-emoji">🌱</span>
+          <span>Daily Check-in</span>
+        </a>
+        <a class="dashboard-card" href="{{ url_for('memories_page') }}">
+          <span class="card-emoji">🧠</span>
+          <span>My Memories</span>
+        </a>
+        <a class="dashboard-card" href="{{ url_for('wellbeing_page') }}">
+          <span class="card-emoji">📊</span>
+          <span>My Wellbeing</span>
+        </a>
+        <a class="dashboard-card" href="{{ url_for('privacy_page') }}">
+          <span class="card-emoji">🔐</span>
+          <span>Privacy</span>
+        </a>
+        <a class="dashboard-card" href="{{ url_for('profile_view') }}">
+          <span class="card-emoji">👤</span>
+          <span>Profile</span>
+        </a>
+      </div>
+
+      {% if trusted_contact %}
+      <div class="info-banner">Your trusted person: {{ trusted_contact.label }}</div>
+      {% endif %}
+
+      {% if latest_check_in %}
+      <div class="summary-box">
+        <strong>Latest check-in:</strong>
+        <span>{{ latest_check_in.mood }}</span>
+        {% if latest_check_in.note %}
+        <p>{{ latest_check_in.note }}</p>
+        {% endif %}
+      </div>
+      {% endif %}
+
+      {% if memories %}
+      <div class="summary-box">
+        <strong>Recent memories</strong>
+        <ul class="mini-list">
+          {% for memory in memories %}
+          <li>{{ memory.content }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+    </section>
+  </main>
+</body>
+</html>

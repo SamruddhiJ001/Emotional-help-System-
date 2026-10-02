@@ -1,0 +1,10 @@
+{
+  "name": "SAATHI",
+  "short_name": "SAATHI",
+  "description": "A supportive AI conversation companion.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f6f3eb",
+  "theme_color": "#f6f3eb",
+  "icons": []
+}

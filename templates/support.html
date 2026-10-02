@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f3eb">
+  <title>Get Help Now - SAATHI</title>
+  <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="page-shell">
+  <header class="site-header dashboard-header">
+    <a class="brand" href="{{ url_for('home') }}" aria-label="SAATHI home">
+      <span class="brand-mark" aria-hidden="true"><i></i><b></b></span>
+      <span>saathi<span class="brand-period">.</span></span>
+    </a>
+    <nav class="top-nav dashboard-nav" aria-label="Main navigation">
+      <a href="{{ url_for('home') }}">Home</a>
+      <a href="{{ url_for('chat') }}">Chat</a>
+      <a href="{{ url_for('check_in_page') }}">Check-in</a>
+      <a href="{{ url_for('profile_view') }}">Profile</a>
+    </nav>
+  </header>
+
+  <main class="page-main compact-main">
+    <section class="simple-panel support-panel">
+      <p class="eyebrow">Get Help Now</p>
+      <h1>Immediate support</h1>
+      <p class="support-copy">If you may be in immediate danger, get to a safe place or contact emergency support right away.</p>
+      <ul class="support-list">
+        <li><strong>Emergency:</strong> call 112</li>
+        <li><strong>Tele MANAS:</strong> 14416</li>
+        <li><strong>KIRAN:</strong> 1800-599-0019</li>
+      </ul>
+      <div class="support-actions">
+        <a class="button button-primary" href="tel:112">Call 112</a>
+        <a class="button button-quiet" href="{{ url_for('profile_view') }}">Talk to someone I trust</a>
+      </div>
+      <p class="support-note">This is a prototype support pathway, not a diagnosis. It is meant to encourage immediate human support when something may be serious.</p>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f3eb">
+  <title>Profile - SAATHI</title>
+  <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="page-shell">
+  <header class="site-header dashboard-header">
+    <a class="brand" href="{{ url_for('home') }}" aria-label="SAATHI home">
+      <span class="brand-mark" aria-hidden="true"><i></i><b></b></span>
+      <span>saathi<span class="brand-period">.</span></span>
+    </a>
+    <nav class="top-nav dashboard-nav" aria-label="Main navigation">
+      <a href="{{ url_for('home') }}">Home</a>
+      <a href="{{ url_for('chat') }}">Chat</a>
+      <a href="{{ url_for('check_in_page') }}">Check-in</a>
+      <a href="{{ url_for('profile_view') }}">Profile</a>
+    </nav>
+  </header>
+
+  <main class="page-main compact-main">
+    <section class="simple-panel">
+      <p class="eyebrow">Profile</p>
+      <h1>{{ current_user.username }}</h1>
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="flash-stack">
+            {% for category, message in messages %}
+              <p class="flash-item {{ category }}">{{ message }}</p>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <div class="simple-card">
+        <h2>Trusted person</h2>
+        {% if trusted_contact %}
+          <p>Your trusted person: <strong>{{ trusted_contact.label }}</strong></p>
+        {% else %}
+          <p>No trusted person saved yet.</p>
+        {% endif %}
+        <form method="post" action="{{ url_for('save_trusted_person') }}" class="stacked-form">
+          <label for="trusted-label">Trusted person label</label>
+          <input id="trusted-label" name="label" type="text" maxlength="80" placeholder="Mom" value="{{ trusted_contact.label if trusted_contact else '' }}">
+          <button type="submit" class="button button-primary">Save trusted person</button>
+        </form>
+      </div>
+
+      <div class="simple-card">
+        <h2>Support</h2>
+        <p>Consider reaching out to someone you trust when things feel heavy.</p>
+        <a class="button button-quiet" href="{{ url_for('support_page') }}">Get Help Now</a>
+      </div>
+
+      <form method="post" action="{{ url_for('logout') }}" class="stacked-form">
+        <button type="submit" class="button button-quiet danger-button">Log out</button>
+      </form>
+    </section>
+  </main>
+</body>
+</html>

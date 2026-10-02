@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f3eb">
+  <title>Log in - SAATHI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght,SOFT,WONK@9..144,40,1,1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="auth-page">
+  <header class="auth-header">
+    <a class="brand" href="{{ url_for('home') }}" aria-label="SAATHI home">
+      <span class="brand-mark" aria-hidden="true"><i></i><b></b></span>
+      <span>saathi<span class="brand-period">.</span></span>
+    </a>
+    <a class="auth-nav-link" href="{{ url_for('register') }}">New to SAATHI? <strong>Create account</strong></a>
+  </header>
+  <main class="auth-main">
+    <section class="auth-card" aria-labelledby="login-title">
+      <p class="eyebrow">Welcome back</p>
+      <h1 id="login-title">Good to see you.</h1>
+      <p class="auth-intro">Pick up your conversations whenever you're ready.</p>
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="auth-notices" role="alert">
+            {% for category, message in messages %}<p class="auth-notice {{ category }}">{{ message }}</p>{% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+      <form class="auth-form" method="post" action="{{ url_for('login_submit') }}">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email" required value="{{ request.form.get('email', '') }}">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required>
+        <button class="auth-submit" type="submit">Log in <span aria-hidden="true">&#8594;</span></button>
+      </form>
+      <p class="auth-footnote">SAATHI is a friendly companion, not a substitute for professional care.</p>
+    </section>
+  </main>
+</body>
+</html>
